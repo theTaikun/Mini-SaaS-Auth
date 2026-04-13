@@ -1,5 +1,10 @@
 // src/components/MagicLink.jsx
 
+import {
+    Button,
+    TextInput,
+    Title
+} from "@mantine/core";
 import { useState, } from "react";
 
 import { useAuth } from '../auth/AuthProvider'
@@ -27,7 +32,7 @@ export default function MagicLink() {
     if (verifying) {
         return (
             <div>
-                <h1>Authentication</h1>
+                <Title>Authentication</Title>
                 <p>Confirming your magic link...</p>
                 <p>Loading...</p>
             </div>
@@ -38,17 +43,17 @@ export default function MagicLink() {
     if (authError) {
         return (
             <div>
-                <h1>Authentication</h1>
+                <Title>Authentication</Title>
                 <p>✗ Authentication failed</p>
                 <p>{authError}</p>
-                <button
+                <Button
                     onClick={() => {
                         setAuthError(null);
                         window.history.replaceState({}, document.title, "/");
                     }}
                 >
                     Return to login
-                </button>
+                </Button>
             </div>
         );
     }
@@ -57,7 +62,7 @@ export default function MagicLink() {
     if (authSuccess && !claims) {
         return (
             <div>
-                <h1>Authentication</h1>
+                <Title>Authentication</Title>
                 <p>✓ Authentication successful!</p>
                 <p>Loading your account...</p>
             </div>
@@ -68,11 +73,11 @@ export default function MagicLink() {
     if (claims) {
         return (
             <div>
-                <h1>Welcome!</h1>
+                <Title>Welcome!</Title>
                 <p>You are logged in as: {claims.email}</p>
-                <button onClick={handleLogout}>
+                <Button onClick={handleLogout}>
                     Sign Out
-                </button>
+                </Button>
                 <pre>{JSON.stringify(claims,null,2)}</pre>
             </div>
         );
@@ -81,19 +86,19 @@ export default function MagicLink() {
     // Show login form
     return (
         <div>
-            <h1>Supabase + React</h1>
+            <Title>Supabase + React</Title>
             <p>Sign in via magic link with your email below</p>
             <form onSubmit={handleSubmit}>
-                <input
+                <TextInput
                     type="email"
                     placeholder="Your email"
                     value={email}
                     required={true}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <button disabled={loading}>
+                <Button disabled={loading}>
                     {loading ? <span>Loading</span> : <span>Send magic link</span>}
-                </button>
+                </Button>
             </form>
             { message }
         </div>
