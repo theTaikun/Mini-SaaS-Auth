@@ -8,77 +8,77 @@ const AuthContext = createContext({})
 export const useAuth = () => useContext(AuthContext)
 
 export function AuthProvider({ children }) {
-    const [loading, setLoading] = useState(false);
-    const [claims, setClaims] = useState(null);
-
-    // Check URL params on initial render
-    const params = new URLSearchParams(window.location.search);
-    const hasTokenHash = params.get("token_hash");
-
-    const [verifying, setVerifying] = useState(!!hasTokenHash);
-    const [authError, setAuthError] = useState(null);
-    const [authSuccess, setAuthSuccess] = useState(false);
+    const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
-        // Check if we have token_hash in URL (magic link callback)
-        const params = new URLSearchParams(window.location.search);
-        const token_hash = params.get("token_hash");
-        const type = params.get("type");
+        // get initial session
+        supabase.auth.getUser().then(({ data }) => {
+            setUser(data?.user ?? null)
+            setLoading(false)
+        })
 
-        if (token_hash) {
-            // Verify the OTP token
-            supabase.auth.verifyOtp({
-                token_hash,
-                type: type || "email",
-            }).then(({ error }) => {
-                if (error) {
-                    setAuthError(error.message);
-                } else {
-                    setAuthSuccess(true);
-                    // Clear URL params
-                    window.history.replaceState({}, document.title, "/");
-                }
-                setVerifying(false);
-            });
+        // listen for changes
+        const { data: listener } = supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                setUser(session?.user ?? null)
+            }
+        )
+
+        return () => {
+            listener.subscription.unsubscribe()
         }
+    }, [])
 
-        // Check for existing session using getClaims
-        supabase.auth.getClaims().then(({ data: { claims } }) => {
-            setClaims(claims);
-        });
-
-        // Listen for auth changes
-        const {
-            data: { subscription },
-        } = supabase.auth.onAuthStateChange(() => {
-            supabase.auth.getClaims().then(({ data: { claims } }) => {
-                setClaims(claims);
-            });
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
-
-    const handleLogin = (email) =>supabase.auth.signInWithOtp({
+    async function register(email, password) {
+        const { data, error } = await supabase.auth.signUp({
             email,
+            password,
             options: {
                 emailRedirectTo: window.location.origin,
+                //emailRedirectTo: `${window.location.origin}/auth/callback`,
             }
         });
 
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        setClaims(null);
+        if (error) throw error
+        return data
+    }
+
+    async function loginWithMagickLink(email) {
+        supabase.auth.signInWithOtp({
+            email,
+            options: {
+                emailRedirectTo: window.location.origin,
+                //emailRedirectTo: `${window.location.origin}/auth/callback`,
+            }
+        });
+    }
+
+    async function login(email, password) {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (error) throw error
+        return data
+    }
+
+    async function logout()  {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        setUser(null);
     };
 
     const value = {
-        claims,
+        user,
         loading,
-        //signUp,
-        handleLogin,
-        handleLogout,
-        //signInWithGoogle,
-      }
+        register,
+        //loginWithMagickLink,
+        login,
+        logout,
+        isAuthenticated: !!user,
+    }
 
     return (
         <AuthContext.Provider value={value}>

@@ -7,11 +7,20 @@ import {
     AppShell,
     Title,
 } from '@mantine/core';
-import MagicLink from './components/MagicLink'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import RootRedirect from './layouts/RootRedirect'
+import AuthLayout from './layouts/AuthLayout'
+import ProtectedLayout from './layouts/ProtectedLayout'
+
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Dashboard from './pages/Dashboard'
 
 export default function App() {
   return (
       <>
+        <BrowserRouter>
         <MantineProvider>
             <AppShell
                 header={{ height: 60 }}
@@ -21,10 +30,22 @@ export default function App() {
                     <Title>Mini SaaS Auth</Title>
                 </AppShell.Header>
                 <AppShell.Main>
-                    < MagicLink />
+                    <Routes>
+                        <Route path="/" element={<RootRedirect />}  />
+
+                        <Route path="/auth" element={<AuthLayout />} >
+                            <Route path="login" element={<Login />} />
+                            <Route path="register" element={<Register />} />
+                        </Route>
+
+                        <Route element={<ProtectedLayout />} >
+                            <Route path="/dashboard" element={<Dashboard />} />
+                        </Route>
+                    </Routes>
                 </AppShell.Main>
             </AppShell>
-        </MantineProvider>;
+        </MantineProvider>
+        </BrowserRouter>
       </>
   )
 }
