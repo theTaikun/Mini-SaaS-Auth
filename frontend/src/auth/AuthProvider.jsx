@@ -70,6 +70,11 @@ export function AuthProvider({ children }) {
         setUser(null);
     };
 
+    async function getAccessToken(){
+        const { data } = await supabase.auth.getSession()
+        return data.session?.access_token ?? null
+    }
+
     const value = {
         user,
         loading,
@@ -78,6 +83,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         isAuthenticated: !!user,
+        getAccessToken,
     }
 
     return (
