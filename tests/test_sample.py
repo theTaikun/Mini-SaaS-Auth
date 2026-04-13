@@ -1,10 +1,24 @@
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+
+
 def sample(a):
     return a + 1
 
-"""
-def test_sample_fail():
-    assert sample(3) == 5
-"""
-
-def test_sample_pass():
+def test_sample():
     assert sample(3) == 4
+
+
+app = FastAPI()
+
+@app.get("/")
+async def read_main():
+    return {"msg": "Hello World"}
+
+client = TestClient(app)
+
+def test_read_main():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"msg": "Hello World"}
+
