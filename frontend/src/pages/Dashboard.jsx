@@ -5,25 +5,27 @@ import {
 import { useEffect, useState } from 'react';
 
 import { useAuth } from '../auth/AuthProvider'
+import { useApi } from '../lib/api'
 
 export default function Dashboard(){
-    const { getAccessToken, user } = useAuth()
-    const [ accessToken, setAccessToken ] = useState("")
+    const { user } = useAuth()
+    const api = useApi();
+    const [ apiData, setApiData ] = useState(null)
 
     useEffect(() => {
-        const fetchToken = async () => {
-            const token = await getAccessToken()
-            setAccessToken(token)
+        const fetchData= async () => {
+            const data = await api.get("/")
+            setApiData(data)
         }
-        fetchToken();
+        fetchData();
     }, [])
 
     return (
         <>
         <Title>Dashboard</Title>
         <Title order={2}>Welcome { user.email }</Title>
-        <Title order={3}>Access Token</Title>
-        { accessToken }
+        <Title order={3}>API Response</Title>
+        { JSON.stringify(apiData) }
         <Title order={3}>User Data</Title>
         <pre>
             { JSON.stringify(user, null, 2) }
