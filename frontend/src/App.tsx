@@ -3,7 +3,8 @@
 import '@mantine/core/styles.css';
 
 import { MantineProvider } from '@mantine/core';
+import Supa from './components/Supabase';
 
 export default function App() {
-  return <MantineProvider>{/* Your app here */}</MantineProvider>;
+  return <MantineProvider>< Supa /></MantineProvider>;
 }

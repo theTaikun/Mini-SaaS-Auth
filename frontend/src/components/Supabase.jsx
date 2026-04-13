@@ -1,10 +1,9 @@
-import "./index.css";
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY);
 
-export default function App() {
+export default function Supa() {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [claims, setClaims] = useState(null);
