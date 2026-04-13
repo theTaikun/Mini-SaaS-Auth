@@ -3,8 +3,8 @@
 import '@mantine/core/styles.css';
 
 import { MantineProvider } from '@mantine/core';
-import Supa from './components/Supabase';
+import MagicLink from './components/MagicLink'
 
 export default function App() {
-  return <MantineProvider>< Supa /></MantineProvider>;
+  return <MantineProvider>< MagicLink /></MantineProvider>;
 }
