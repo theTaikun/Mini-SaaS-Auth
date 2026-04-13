@@ -17,3 +17,7 @@ config = ConfigParser()
 config.read(ENV_CONF_FILE)
 
 DATABASE_URL = config.get("DATABASE", "DATABASE_URL")
+
+SUPABASE_URL = config.get("SUPABASE", "SUPABASE_URL")
+SUPABASE_ANON_KEY = config.get("SUPABASE", "SUPABASE_ANON_KEY")
+

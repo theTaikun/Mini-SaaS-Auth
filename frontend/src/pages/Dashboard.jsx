@@ -14,7 +14,7 @@ export default function Dashboard(){
 
     useEffect(() => {
         const fetchData= async () => {
-            const data = await api.get("/")
+            const data = await api.get("/me")
             setApiData(data)
         }
         fetchData();
