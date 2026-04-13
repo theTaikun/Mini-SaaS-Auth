@@ -5,9 +5,13 @@ import '@mantine/core/styles.css';
 import {
     MantineProvider,
     AppShell,
+    Group,
+    Text,
     Title,
 } from '@mantine/core';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import AuthNav from './components/AuthNav'
 
 import RootRedirect from './layouts/RootRedirect'
 import AuthLayout from './layouts/AuthLayout'
@@ -27,7 +31,10 @@ export default function App() {
                 padding="md"
             >
                 <AppShell.Header>
-                    <Title>Mini SaaS Auth</Title>
+                    <Group justify="space-between">
+                        <Text>Mini SaaS Auth</Text>
+                        <AuthNav />
+                    </Group>
                 </AppShell.Header>
                 <AppShell.Main>
                     <Routes>

@@ -6,12 +6,7 @@ import {
 import { useAuth } from '../auth/AuthProvider'
 
 export default function Dashboard(){
-    const { logout, user } = useAuth()
-
-    const handleLogout = async (event) => {
-        event.preventDefault();
-        await logout();
-    }
+    const { user } = useAuth()
 
     return (
         <>
@@ -20,7 +15,6 @@ export default function Dashboard(){
         <pre>
             { JSON.stringify(user, null, 2) }
         </pre>
-        <Button onClick={ handleLogout } >Sign Out</Button>
         </>
     )
 }

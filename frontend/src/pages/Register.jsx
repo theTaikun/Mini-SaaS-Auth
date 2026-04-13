@@ -58,7 +58,7 @@ export default function Register() {
                 </Button>
             </form>
             { message }
-        <Anchor component={Link} to="/auth/login">Sign In</Anchor>
+        Or <Anchor component={Link} to="/auth/login">Log In</Anchor> instead.
         </div>
     );
 }
