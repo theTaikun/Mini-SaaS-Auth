@@ -1,7 +1,6 @@
 # core/supabase.py
 
 from supabase import create_client, Client
-import os
 
 from definitions import SUPABASE_ANON_KEY, SUPABASE_URL
 

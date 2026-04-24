@@ -5,7 +5,8 @@ from sqlalchemy.pool import NullPool
 from definitions import DATABASE_URL
 
 
-engine = create_engine(DATABASE_URL, poolclass=NullPool) # NullPool only required if using pooling URI
+# NullPool only required if using pooling URI
+engine = create_engine(DATABASE_URL, poolclass=NullPool)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 def get_db():

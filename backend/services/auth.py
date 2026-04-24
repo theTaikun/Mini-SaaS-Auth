@@ -1,8 +1,9 @@
 # services/auth.py
 
+import uuid
+
 from fastapi import Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
-import uuid
 
 from core.supabase import supabase
 from database import get_db
@@ -24,11 +25,11 @@ async def get_current_user(
 
     try:
         response = supabase.auth.get_user(token)
-    except Exception:
+    except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token"
-        )
+        ) from e
 
     supabase_user = response.user
     if not supabase_user:

@@ -16,4 +16,3 @@ class User(Base):
 
     # App-only info not in auth provider:
     nickname = Column(String, nullable=False, default="theTaikun")
-
