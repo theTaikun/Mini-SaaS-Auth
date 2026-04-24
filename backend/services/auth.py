@@ -42,7 +42,7 @@ async def get_current_user(
     # check local user
     user = db.query(User).filter(
         User.provider_user_id == provider_user_id
-    ).first()
+    ).one_or_none()
 
     # create if missing
     if not user:
