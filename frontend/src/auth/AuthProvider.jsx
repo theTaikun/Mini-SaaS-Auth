@@ -36,7 +36,7 @@ export function AuthProvider({ children }) {
             email,
             password,
             options: {
-                emailRedirectTo: window.location.origin,
+                emailRedirectTo: `${import.meta.env.VITE_PUBLIC_URL}/`,
                 //emailRedirectTo: `${window.location.origin}/auth/callback`,
             }
         });
@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
         supabase.auth.signInWithOtp({
             email,
             options: {
-                emailRedirectTo: window.location.origin,
+                emailRedirectTo: import.meta.env.VITE_PUBLIC_URL,
                 //emailRedirectTo: `${window.location.origin}/auth/callback`,
             }
         });

@@ -28,6 +28,25 @@ because your mobile device will try to contact itself.
 `localhost` will only work if you are using the web browser of the API system,
 or have some sort of proxying configured.
 
+Similarly,
+`VITE_PUBLIC_URL`
+should be set to an address which is accessible by your brower
+to reach this web app.
+
+
+### Supabase
+
+Ensure the URL of your site is listed in `Authentication` -> `URL Configuration`.
+This will be the callback location after confirming signup via email,
+so your client must be reachable at this location.
+Supabase defaults to `http://localhost:3000`,
+so if you access the web app from your browser using this address,
+by default.
+Most likely,
+it will be the same as what you configured for
+`VITE_PUBLIC_URL`.
+
+
 ## Running
 
 ```bash
