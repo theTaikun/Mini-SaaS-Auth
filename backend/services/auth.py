@@ -42,7 +42,8 @@ async def get_current_user(
 
     # check local user
     user = db.query(User).filter(
-        User.provider_user_id == provider_user_id
+        User.auth_provider_uid == provider_user_id,
+        User.auth_provider == "supabase",
     ).one_or_none()
 
     # create if missing
@@ -51,7 +52,7 @@ async def get_current_user(
             id=str(uuid.uuid4()),
             email=email,
             auth_provider="supabase",
-            provider_user_id=provider_user_id
+            auth_provider_uid=provider_user_id
         )
 
         db.add(user)
