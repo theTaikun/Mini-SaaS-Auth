@@ -4,14 +4,8 @@ import '@mantine/core/styles.css';
 
 import {
     MantineProvider,
-    AppShell,
-    Group,
-    Text,
-    Title,
 } from '@mantine/core';
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
-import AuthNav from './components/AuthNav'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import RootRedirect from './layouts/RootRedirect'
 import AuthLayout from './layouts/AuthLayout'
@@ -19,38 +13,30 @@ import ProtectedLayout from './layouts/ProtectedLayout'
 
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
+
+import AppData from './pages/AppData'
+import AuthData from './pages/AuthData'
+
 
 export default function App() {
   return (
       <>
         <BrowserRouter>
         <MantineProvider>
-            <AppShell
-                header={{ height: 60 }}
-                padding="md"
-            >
-                <AppShell.Header>
-                    <Group justify="space-between">
-                        <Text>Mini SaaS Auth</Text>
-                        <AuthNav />
-                    </Group>
-                </AppShell.Header>
-                <AppShell.Main>
-                    <Routes>
-                        <Route path="/" element={<RootRedirect />}  />
+            <Routes>
+                <Route path="/" element={<RootRedirect />}  />
 
-                        <Route path="/auth" element={<AuthLayout />} >
-                            <Route path="login" element={<Login />} />
-                            <Route path="register" element={<Register />} />
-                        </Route>
+                <Route path="/auth" element={<AuthLayout />} >
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Register />} />
+                </Route>
 
-                        <Route element={<ProtectedLayout />} >
-                            <Route path="/dashboard" element={<Dashboard />} />
-                        </Route>
-                    </Routes>
-                </AppShell.Main>
-            </AppShell>
+                <Route element={<ProtectedLayout />} >
+                    <Route path="/dashboard" element={<Navigate to="authdata" replace />} />
+                    <Route path="/dashboard/appdata" element={<AppData />} />
+                    <Route path="/dashboard/authdata" element={<AuthData />} />
+                </Route>
+            </Routes>
         </MantineProvider>
         </BrowserRouter>
       </>

@@ -1,15 +1,12 @@
 import {
-    Button,
     Text,
     Title,
 } from '@mantine/core'
 import { useEffect, useState } from 'react';
 
-import { useAuth } from '../auth/AuthProvider'
 import { useApi } from '../lib/api'
 
 export default function Dashboard(){
-    const { user } = useAuth()
     const api = useApi();
     const [ apiData, setApiData ] = useState(null)
     const [ loading, setLoading ] = useState(false)
@@ -27,13 +24,9 @@ export default function Dashboard(){
     return (
         <>
         <Title>Dashboard</Title>
-        <Text>Welcome { user.email }!</Text>
-        <Title order={3}>App Data</Title>
-        { loading ? "Loading..." : JSON.stringify(apiData) }
-        <Title order={3}>Auth Data</Title>
-        <pre>
-            { JSON.stringify(user, null, 2) }
-        </pre>
+        <Text>Welcome { apiData ? apiData.nickname : loading ? "..." : null}!</Text>
+        <Title order={2}>App Data</Title>
+        { loading ? "Loading..." : <pre>{JSON.stringify(apiData, null, 2)}</pre> }
         </>
     )
 }
