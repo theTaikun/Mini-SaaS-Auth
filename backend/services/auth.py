@@ -24,25 +24,23 @@ async def get_current_user(
     token = auth_header.replace("Bearer ", "")
 
     try:
-        response = supabase.auth.get_user(token)
+        response = supabase.auth.get_claims(token)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token"
         ) from e
 
-    supabase_user = response.user
+    supabase_user = response["claims"]
     if not supabase_user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid user"
         )
-    provider_user_id = supabase_user.id
-    email = supabase_user.email
 
     # check local user
     user = db.query(User).filter(
-        User.auth_provider_uid == provider_user_id,
+        User.auth_provider_uid == supabase_user["sub"],
         User.auth_provider == "supabase",
     ).one_or_none()
 
@@ -50,9 +48,9 @@ async def get_current_user(
     if not user:
         user = User(
             id=str(uuid.uuid4()),
-            email=email,
+            email=supabase_user["email"],
             auth_provider="supabase",
-            auth_provider_uid=provider_user_id
+            auth_provider_uid=supabase_user["sub"],
         )
 
         db.add(user)
