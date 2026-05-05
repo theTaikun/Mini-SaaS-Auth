@@ -1,21 +1,16 @@
 # pylint: disable=duplicate-code
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.testclient import TestClient
+from fastapi import Request
 import pytest
 from sqlalchemy.exc import IntegrityError
 
-from app import app
-from .conftest import override_get_db
+from models.user import User
 from services.auth import (
     extract_token_from_req,
     get_or_create_app_user,
-    decode_token,
+    #decode_token,
     app_user_from_auth_id,
     create_app_user,
     )
-
-from models.user import User
 
 def craft_request(
     method: str = "GET",
