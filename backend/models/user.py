@@ -17,4 +17,6 @@ class User(Base):
     # App-only info not in auth provider:
     nickname = Column(String, nullable=False, default="theTaikun")
 
-    UniqueConstraint('auth_provider', 'auth_provider_uid', name='USER_AK01')
+    __table_args__ = (
+        UniqueConstraint('auth_provider', 'auth_provider_uid', name='USER_AK01'),
+        )
