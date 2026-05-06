@@ -1,5 +1,6 @@
 # services/auth.py
 
+import logging
 import uuid
 
 from fastapi import Depends, HTTPException, status, Request
@@ -10,6 +11,7 @@ from core.supabase import supabase
 from database import get_db
 from models.user import User
 
+logger = logging.getLogger(__name__)
 
 def extract_token_from_req(request: Request):
     auth_header = request.headers.get("Authorization")
@@ -86,6 +88,8 @@ def create_app_user(
         db.rollback()
         raise
     db.refresh(user)
+
+    logger.info("Created user %{user.id}s")
 
     return user
 
